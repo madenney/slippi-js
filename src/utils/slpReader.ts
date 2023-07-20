@@ -79,6 +79,7 @@ function readRef(ref: SlpRefType, buffer: Uint8Array, offset: number, length: nu
     case SlpInputSource.FILE:
       return fs.readSync((ref as SlpFileSourceRef).fileDescriptor, buffer, offset, length, position);
     case SlpInputSource.BUFFER:
+      console.log("HERE: ", (ref as SlpBufferSourceRef).buffer);
       return (ref as SlpBufferSourceRef).buffer.copy(buffer, offset, position, position + length);
     default:
       throw new Error("Source type not supported");
@@ -130,6 +131,7 @@ export function closeSlpFile(file: SlpFileType): void {
 // This function gets the position where the raw data starts
 function getRawDataPosition(ref: SlpRefType): number {
   const buffer = new Uint8Array(1);
+  console.log("ref: ", ref);
   readRef(ref, buffer, 0, buffer.length, 0);
 
   if (buffer[0] === 0x36) {
